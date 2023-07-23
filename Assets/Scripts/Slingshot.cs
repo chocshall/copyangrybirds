@@ -56,6 +56,15 @@ public class Slingshot : MonoBehaviour
             Vector3 endPoint = c.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, c.nearClipPlane));
             endPoint.z = 0;
 
+            //Vector2[] trajectory = Plot(rb, (Vector2)trasform.position, velocity, 500);
+            //        lr.positionCount = trajectory.Length;
+
+            //        Vector3[] positions = new Vector3[trajectory.Length];
+            //        for (int i = 0; i < positions.Length; i ++)
+            //        {
+            //            positions[i] = trajectory[i];
+            //        }
+            //        lr.SetPositions(positions);
 
             Vector3 newVector = initialPoint - endPoint;
 
@@ -75,4 +84,25 @@ public class Slingshot : MonoBehaviour
     }
 
     //Vector3 newVector = startPoint - initialPoint;
+
+//    public Vector2[] Plot(Rigidbody2D rigidbody, Vector2 pos, Vector2 velocity, int steps)
+//    {
+//        Vector2[] results = new Vector2[steps];
+
+//        float timestep = Time.fixedDeltaTime / Physics2d.velocityIterations;
+//        Vector2 gravityAccel = Physics2d.gravity * rigidbody.gravityScale * timestep * timestep;
+
+//        float drag = 1f - timestep * rigidbody.drag;
+//        Vector2 moveStep = velocity * timestep;
+
+//        for (int i = 0; i < steps; i++)
+//        {   moveStep += gravityAccel;
+//            moveStep += drag;
+//            pos += moveStep;
+//            results[i] = pos;
+        
+//        }
+//    }
+    
+//    return results;
 }
