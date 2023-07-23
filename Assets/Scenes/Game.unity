@@ -332,10 +332,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 5
+  m_Mass: 3
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 0
+  m_GravityScale: 0.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -397,18 +397,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8220997661778890589, guid: 7e78c2aeb46b70147965b43f5d221594, type: 3}
   m_PrefabInstance: {fileID: 4169443602318381394}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1166670287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1166670278}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fb3022c61c577458480ebfa58ae8c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!120 &1166670289
 LineRenderer:
   serializedVersion: 2
@@ -659,7 +647,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   birdRb: {fileID: 1166670280}
-  strengthMultiplier: 2
+  trajectoryLine: {fileID: 1166670289}
+  strengthMultiplier: 5
 --- !u!212 &1315423252
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1099,7 +1088,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 204280015354722497, guid: 7e78c2aeb46b70147965b43f5d221594, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1109,9 +1099,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7239069162863572010, guid: 7e78c2aeb46b70147965b43f5d221594, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1166670283}
-    - targetCorrespondingSourceObject: {fileID: 7239069162863572010, guid: 7e78c2aeb46b70147965b43f5d221594, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1166670287}
     - targetCorrespondingSourceObject: {fileID: 7239069162863572010, guid: 7e78c2aeb46b70147965b43f5d221594, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1166670289}
