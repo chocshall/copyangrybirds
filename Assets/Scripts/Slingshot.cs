@@ -9,13 +9,15 @@ public class Slingshot : MonoBehaviour
     [Header("Slingshot Settings")]
     [SerializeField] private LineRenderer trajectoryLine;
     [SerializeField] private float maxStretchRadius = 2;
-    [SerializeField] private int numPoints = 100;
+    [SerializeField] private int numPoints = 50;
     [SerializeField] private float timeStep = 0.1f;
 
+    
     private LineRenderer lineRenderer;
     private CameraScript cameraScript;
     private Vector3 fireVector;
     private Vector3 endPos;
+    
 
     private void Start()
     {
@@ -24,8 +26,9 @@ public class Slingshot : MonoBehaviour
 
     private void InitializeComponents()
     {
+        
         trajectoryLine.positionCount = numPoints;
-        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer = GetComponent<LineRenderer>(); 
         cameraScript = Camera.main.GetComponent<CameraScript>();
     }
 
@@ -33,6 +36,7 @@ public class Slingshot : MonoBehaviour
     {
         birdRb.isKinematic = true;
         birdRb.velocity = Vector2.zero;
+        
     }
 
     private void OnMouseUp()
@@ -40,8 +44,9 @@ public class Slingshot : MonoBehaviour
         birdRb.isKinematic = false;
         fireVector *= strengthMultiplier;
         birdRb.velocity = fireVector;
-
         cameraScript.SetFollowBool(true);
+        
+
     }
 
     private void OnMouseDrag()
