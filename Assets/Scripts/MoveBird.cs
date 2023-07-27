@@ -26,18 +26,31 @@ public class MoveBird : MonoBehaviour
     }
 
 
-    public IEnumerator CoroutineAction()
+    //public IEnumerator CoroutineAction()
+    //{
+    //    trailrenderer.emitting = false;
+    //    yield return WaitFor.Frames(5)); // wait for 5 frames
+    //    trailrenderer.emitting = true;
+    //}
+
+
+
+
+
+
+    [SerializeField] CinemachineScript _cinemachineScript;
+    [HideInInspector] public bool isFired;
+  
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        trailrenderer.emitting = false;
-        yield return StartCoroutine(WaitFor.Frames(5)); // wait for 5 frames
-        trailrenderer.emitting = true;
+        if (isFired)
+        {
+            _cinemachineScript.StopFollowing();
+            isFired = false;
+        }
+            
     }
-
-
-
-
-
-
 }
 
 
