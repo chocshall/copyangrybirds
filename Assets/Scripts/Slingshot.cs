@@ -4,6 +4,7 @@ public class Slingshot : MonoBehaviour
 {
     [Header("Bird Settings")]
     [SerializeField] private Rigidbody2D birdRb;
+    private MoveBird birdScript;
     [SerializeField] private float strengthMultiplier = 5.0f;
 
     [Header("Slingshot Settings")]
@@ -14,7 +15,7 @@ public class Slingshot : MonoBehaviour
 
     
     private LineRenderer lineRenderer;
-    private CameraScript cameraScript;
+    
     private Vector3 fireVector;
     private Vector3 endPos;
     
@@ -28,15 +29,20 @@ public class Slingshot : MonoBehaviour
     {
         
         trajectoryLine.positionCount = numPoints;
-        lineRenderer = GetComponent<LineRenderer>(); 
-        cameraScript = Camera.main.GetComponent<CameraScript>();
+        lineRenderer = GetComponent<LineRenderer>();
+        birdScript = birdRb.GetComponent<MoveBird>();
+
+
     }
 
     private void OnMouseDown()
     {
         birdRb.isKinematic = true;
         birdRb.velocity = Vector2.zero;
-        
+
+        if (birdScript != null)
+            birdScript.isAiming = true;
+
     }
 
     private void OnMouseUp()
@@ -44,8 +50,13 @@ public class Slingshot : MonoBehaviour
         birdRb.isKinematic = false;
         fireVector *= strengthMultiplier;
         birdRb.velocity = fireVector;
-        cameraScript.SetFollowBool(true);
-        
+
+        if(birdScript != null)
+        {
+            birdScript.isFired = true;
+            birdScript.isAiming = false;
+        }
+            
 
     }
 

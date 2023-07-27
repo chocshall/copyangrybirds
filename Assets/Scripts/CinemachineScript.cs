@@ -14,8 +14,8 @@ public class CinemachineScript : MonoBehaviour
 
     [SerializeField] Transform _followObject;
     [SerializeField] Transform _mousePan;
-    public bool isAiming;
 
+    private MoveBird birdScript;
 
     //Vector3 Difference;
     Vector2 _lastMousePos;
@@ -31,6 +31,7 @@ public class CinemachineScript : MonoBehaviour
     {
         _main.Follow = _followObject;
         //ResetCamera = Camera.main.transform.position;
+        birdScript = _followObject.GetComponent<MoveBird>();
     }
 
     bool drag;
@@ -44,7 +45,7 @@ public class CinemachineScript : MonoBehaviour
             ChangeStartShotPriority();
         }
         
-        if(!isAiming)
+        if(!birdScript.isAiming && !birdScript.isFired)
         {
             Vector3 inputDir = new Vector3(0, 0, 0);
             if (Input.GetMouseButtonDown(0))
@@ -75,7 +76,7 @@ public class CinemachineScript : MonoBehaviour
             _mousePan.position = Vector3.right * Mathf.Clamp(_mousePan.position.x, -5, 16);
         }
 
-        if (isAiming)
+        if (birdScript.isAiming || birdScript.isFired)
         {
             _main.Follow = _followObject;
         }
