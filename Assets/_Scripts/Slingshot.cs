@@ -1,10 +1,23 @@
 using UnityEngine;
 
+
+public enum SlingshotState
+{ 
+    Idle,
+    Pulling,
+    Fired
+}
+
+
+
 public class Slingshot : MonoBehaviour
 {
     [Header("Bird Settings")]
-    [SerializeField] private Rigidbody2D birdRb;
-    private MoveBird birdScript;
+    [HideInInspector]
+    public GameObject BirdToThrow;
+
+    //[SerializeField] private Rigidbody2D birdRb;
+    //private MoveBird birdScript;
     [SerializeField] private float strengthMultiplier = 5.0f;
 
     [Header("Slingshot Settings")]
@@ -13,7 +26,9 @@ public class Slingshot : MonoBehaviour
     [SerializeField] private int numPoints = 50;
     [SerializeField] private float timeStep = 0.1f;
 
-    
+    [HideInInspector]
+    public SlingshotState slingshotState = SlingshotState.Idle;
+
     private LineRenderer lineRenderer;
     
     private Vector3 fireVector;
@@ -30,39 +45,31 @@ public class Slingshot : MonoBehaviour
         
         trajectoryLine.positionCount = numPoints;
         lineRenderer = GetComponent<LineRenderer>();
-        birdScript = birdRb.GetComponent<MoveBird>();
+        //birdScript = birdRb.GetComponent<MoveBird>();
 
 
     }
 
+    //PULLING STATE
     private void OnMouseDown()
     {
-        birdRb.isKinematic = true;
-        birdRb.velocity = Vector2.zero;
-
-        if (birdScript != null)
-            birdScript.isAiming = true;
-
+        slingshotState = SlingshotState.Pulling;
     }
 
+    //FIRED STATE
     private void OnMouseUp()
     {
-        birdRb.isKinematic = false;
+        slingshotState = SlingshotState.Fired;
+
+
+        BirdToThrow.GetComponent<MoveBird>().OnThrow();
         fireVector *= strengthMultiplier;
-        birdRb.velocity = fireVector;
-
-        if(birdScript != null)
-        {
-            birdScript.isFired = true;
-            birdScript.isAiming = false;
-        }
-            
-
+        BirdToThrow.GetComponent<Rigidbody2D>().velocity = fireVector;
     }
 
     private void OnMouseDrag()
     {
-        birdRb.velocity = Vector2.zero;
+        //birdRb.velocity = Vector2.zero;
         var initialPoint = transform.position + Vector3.up * 0.7f;
         lineRenderer.SetPosition(0, initialPoint);
 
@@ -78,10 +85,10 @@ public class Slingshot : MonoBehaviour
 
         lineRenderer.SetPosition(1, endPos);
 
-        birdRb.position = endPos;
+        BirdToThrow.transform.position = endPos;
 
         fireVector = initialPoint - endPos;
-        PlotLine(birdRb, trajectoryLine, fireVector * strengthMultiplier);
+        PlotLine(BirdToThrow.GetComponent<Rigidbody2D>(), trajectoryLine, fireVector * strengthMultiplier);
     }
 
     private void PlotLine(Rigidbody2D rb, LineRenderer lr, Vector2 velocity)

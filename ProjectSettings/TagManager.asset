@@ -7,6 +7,8 @@ TagManager:
   - Blocks
   - Wood
   - Glass
+  - Bird
+  - Pig
   layers:
   - Default
   - TransparentFX
