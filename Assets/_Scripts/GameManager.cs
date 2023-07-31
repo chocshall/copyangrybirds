@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
         _Birds = new List<GameObject>(GameObject.FindGameObjectsWithTag("Bird"));
         _Pigs = new List<GameObject>(GameObject.FindGameObjectsWithTag("Pig"));
         _currentBirdIndex = _Birds.Count - 1;
+       
         //_slingshot.enabled = false;
         _slingshot.BirdToThrow = _Birds[_currentBirdIndex];
         _mainCamera._followBird = _Birds[_currentBirdIndex];
@@ -67,6 +68,15 @@ public class GameManager : MonoBehaviour
                     {
                         if(birdScript._birdState == BirdState.Stopped)
                         {
+
+                            _currentBirdIndex--;
+                            if(_currentBirdIndex <= -1)
+                            {
+                                CurrentGameState = GameState.Lost; // laikinas
+                                //reikia patikrinti ar laimejom ar prakisom ir pagal tai nuspresti ka daryti
+                                break;
+                            }
+
                             StartCoroutine(PrepareAnotherBird(_birdResetDelay));
                             _slingshot.slingshotState = SlingshotState.Idle;
                         }
@@ -87,7 +97,7 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GameState.Lost:
-
+                Debug.Log("GAME OVER");
 
                 break;
 
@@ -97,7 +107,6 @@ public class GameManager : MonoBehaviour
     IEnumerator PrepareAnotherBird(float delay)
     {
         yield return new WaitForSeconds(delay);
-        _currentBirdIndex--;
         MoveCameraToSlingshot();
         AnimateBirdToSlingshot();
         

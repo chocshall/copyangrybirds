@@ -15,13 +15,13 @@ public class Slingshot : MonoBehaviour
     [Header("Bird Settings")]
     [HideInInspector]
     public GameObject BirdToThrow;
+    private LineRenderer trajectoryLine;
 
     //[SerializeField] private Rigidbody2D birdRb;
     //private MoveBird birdScript;
     [SerializeField] private float strengthMultiplier = 5.0f;
 
     [Header("Slingshot Settings")]
-    [SerializeField] private LineRenderer trajectoryLine;
     [SerializeField] private float maxStretchRadius = 2;
     [SerializeField] private int numPoints = 50;
     [SerializeField] private float timeStep = 0.1f;
@@ -43,7 +43,7 @@ public class Slingshot : MonoBehaviour
     private void InitializeComponents()
     {
         
-        trajectoryLine.positionCount = numPoints;
+        
         lineRenderer = GetComponent<LineRenderer>();
         //birdScript = birdRb.GetComponent<MoveBird>();
 
@@ -54,6 +54,10 @@ public class Slingshot : MonoBehaviour
     private void OnMouseDown()
     {
         slingshotState = SlingshotState.Pulling;
+
+        trajectoryLine = BirdToThrow.GetComponent<LineRenderer>();
+        trajectoryLine.positionCount = numPoints;
+
     }
 
     //FIRED STATE

@@ -12,10 +12,10 @@ public enum BirdState
 
 public class MoveBird : MonoBehaviour
 {
-    private TrailRenderer trailrenderer;
+    //private TrailRenderer trailrenderer;
     Vector3 startingPos;
     Rigidbody2D rb;
-    BoxCollider2D box2D;
+    PolygonCollider2D box2D;
 
     [SerializeField] float timeAlive = 5;
     [SerializeField] float minVelocity = 1;
@@ -29,7 +29,7 @@ public class MoveBird : MonoBehaviour
         //trailrenderer = gameObject.GetComponent<TrailRenderer>();
        
         rb = GetComponent<Rigidbody2D>();
-        box2D = GetComponent<BoxCollider2D>();
+        box2D = GetComponent<PolygonCollider2D>();
         startingPos = transform.position;
 
         rb.isKinematic = true;
@@ -102,7 +102,7 @@ public class MoveBird : MonoBehaviour
     IEnumerator DestructionCooldown(float timer)
     {
         yield return new WaitForSeconds(timer);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
 
     }
 }
