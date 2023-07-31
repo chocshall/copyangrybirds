@@ -50,7 +50,20 @@ public class MoveBird : MonoBehaviour
 
         while (timeElapsed < lerpDuration)
         {
-            transform.position = Vector3.Lerp(startingPos, slingshotPos.position, timeElapsed / lerpDuration);
+            // The center of the arc
+            Vector3 center = (startingPos + slingshotPos.position) * 0.5F;
+
+            // move the center a bit downwards to make the arc vertical
+             center -= new Vector3(0, 1, 0);
+
+            // Interpolate over the arc relative to center
+            Vector3 riseRelCenter = startingPos - center;
+            Vector3 setRelCenter = slingshotPos.position - center;
+
+
+            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, timeElapsed / lerpDuration);
+            transform.position += center;
+
             timeElapsed += Time.deltaTime;
             yield return null;
         }
