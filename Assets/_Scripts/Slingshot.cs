@@ -25,6 +25,8 @@ public class Slingshot : MonoBehaviour
     [SerializeField] private float maxStretchRadius = 2;
     [SerializeField] private int numPoints = 50;
     [SerializeField] private float timeStep = 0.1f;
+    [SerializeField] private LineRenderer lineRendererPart;
+    [SerializeField] private Transform lineRendererPartMiddle;
 
     [HideInInspector]
     public SlingshotState slingshotState = SlingshotState.Idle;
@@ -56,6 +58,7 @@ public class Slingshot : MonoBehaviour
         slingshotState = SlingshotState.Pulling;
 
         trajectoryLine = BirdToThrow.GetComponent<LineRenderer>();
+        trajectoryLine.enabled = true;
         trajectoryLine.positionCount = numPoints;
 
     }
@@ -69,12 +72,16 @@ public class Slingshot : MonoBehaviour
         BirdToThrow.GetComponent<MoveBird>().OnThrow();
         fireVector *= strengthMultiplier;
         BirdToThrow.GetComponent<Rigidbody2D>().velocity = fireVector;
+
+        trajectoryLine.enabled = false;
     }
 
     private void OnMouseDrag()
     {
         //birdRb.velocity = Vector2.zero;
         var initialPoint = transform.position + Vector3.up * 0.7f;
+
+        lineRendererPart.SetPosition(0, lineRendererPartMiddle.position);
         lineRenderer.SetPosition(0, initialPoint);
 
         Vector3 endPoint = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
@@ -88,6 +95,7 @@ public class Slingshot : MonoBehaviour
         endPos.x = Mathf.Clamp(endPos.x, -100, transform.position.x);
 
         lineRenderer.SetPosition(1, endPos);
+        lineRendererPart.SetPosition(1, endPos);
 
         BirdToThrow.transform.position = endPos;
 

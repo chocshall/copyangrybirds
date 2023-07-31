@@ -12,7 +12,7 @@ public enum BirdState
 
 public class MoveBird : MonoBehaviour
 {
-    //private TrailRenderer trailrenderer;
+    private TrailRenderer trailrenderer;
     Vector3 startingPos;
     Rigidbody2D rb;
     PolygonCollider2D box2D;
@@ -30,6 +30,7 @@ public class MoveBird : MonoBehaviour
        
         rb = GetComponent<Rigidbody2D>();
         box2D = GetComponent<PolygonCollider2D>();
+        trailrenderer = GetComponent<TrailRenderer>();
         startingPos = transform.position;
 
         rb.isKinematic = true;
@@ -38,11 +39,53 @@ public class MoveBird : MonoBehaviour
 
         //StartCoroutine(MoveToSlingshot());
     }
+
+    [SerializeField] GameObject bigCircle;
+    [SerializeField] GameObject smollCircle;
+    private Coroutine _moveCoroutine;
+    private Coroutine _moveCoroutine2;
     private void Update()
     {
-         
+
         //transform.position += new Vector3(transform.position.x + 2, 1.26f);
+
+        if (_birdState == BirdState.Flying)
+        {
+            //if (_moveCoroutine == null)
+            //{
+            //    _moveCoroutine = StartCoroutine(SummonTrail(.2f, bigCircle, "big"));
+                
+            //}
+            //if (_moveCoroutine2 == null)
+            //{
+            //    _moveCoroutine2 = StartCoroutine(SummonTrail(.1f, smollCircle, "smoll"));
+            //}
+            //
+        }
     }
+    IEnumerator SummonTrail(float count, GameObject circle, string size)
+    {
+        
+
+        yield return new WaitForSeconds(count);
+
+        Vector2 particlePos = rb.position;
+        Instantiate(circle, particlePos, Quaternion.identity);
+        //do something 
+        // print("works?");
+
+
+
+        if(size == "big")
+         _moveCoroutine = null;
+
+        if (size == "smoll")
+            _moveCoroutine2 = null;
+    }
+
+
+
+
     [SerializeField]float lerpDuration = 1;
     public IEnumerator MoveToSlingshot()
     {
@@ -78,18 +121,18 @@ public class MoveBird : MonoBehaviour
         rb.isKinematic = false;
         _birdState = BirdState.Flying;
         box2D.enabled = true;
-
+        trailrenderer.enabled = true;
     }
     
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
+        trailrenderer.emitting = false;
         //MOVE TO GAME MANAGER
         //_cinemachineScript.StopFollowing();
         //  StartCoroutine(ResetCooldown(2));
         //  Start destruction Cycle
-        if(rb.velocity.magnitude <= minVelocity && _birdState == BirdState.Flying)
+        if (rb.velocity.magnitude <= minVelocity && _birdState == BirdState.Flying)
         {
             _birdState = BirdState.Stopped;
 
