@@ -44,23 +44,46 @@ public class MoveBird : MonoBehaviour
     [SerializeField] GameObject smollCircle;
     private Coroutine _moveCoroutine;
     private Coroutine _moveCoroutine2;
+
+    float spawnIntervalA = 0.1f;
+    float spawnIntervalB = 0.1f;
+
+    private float timeSinceLastSpawn;
+    private bool isPrefabA = true;
+    List<GameObject> trailArray = new List<GameObject>();
+    [SerializeField] Transform trailStorage;
+    [SerializeField] Transform particleStorage;
+
+    [SerializeField] ParticleSystem hitParticle;
+    [SerializeField] ParticleSystem cloudParticle;
+    bool isTrail = true;
     private void Update()
     {
 
         //transform.position += new Vector3(transform.position.x + 2, 1.26f);
 
-        if (_birdState == BirdState.Flying)
+        if (_birdState == BirdState.Flying && isTrail)
         {
-            //if (_moveCoroutine == null)
-            //{
-            //    _moveCoroutine = StartCoroutine(SummonTrail(.2f, bigCircle, "big"));
-                
-            //}
-            //if (_moveCoroutine2 == null)
-            //{
-            //    _moveCoroutine2 = StartCoroutine(SummonTrail(.1f, smollCircle, "smoll"));
-            //}
-            //
+            
+            if(Input.GetMouseButtonDown(0))
+            {
+                Instantiate(cloudParticle, transform.position, Quaternion.identity, particleStorage);
+            }
+
+            timeSinceLastSpawn += Time.deltaTime;
+
+            if (isPrefabA && timeSinceLastSpawn >= spawnIntervalA)
+            {
+                SpawnTrailElement(bigCircle);
+                isPrefabA = false;
+                timeSinceLastSpawn = 0f;
+            }
+            else if (!isPrefabA && timeSinceLastSpawn >= spawnIntervalB)
+            {
+                SpawnTrailElement(smollCircle);
+                isPrefabA = true;
+                timeSinceLastSpawn = 0f;
+            }
         }
     }
     IEnumerator SummonTrail(float count, GameObject circle, string size)
@@ -83,7 +106,11 @@ public class MoveBird : MonoBehaviour
             _moveCoroutine2 = null;
     }
 
-
+    private void SpawnTrailElement(GameObject prefab)
+    {
+        trailArray.Add(Instantiate(prefab, transform.position, Quaternion.identity, trailStorage));
+        // Optionally parent the new trail element to a container or parent object for organization.
+    }
 
 
     [SerializeField]float lerpDuration = 1;
@@ -121,13 +148,18 @@ public class MoveBird : MonoBehaviour
         rb.isKinematic = false;
         _birdState = BirdState.Flying;
         box2D.enabled = true;
-        trailrenderer.enabled = true;
+       // trailrenderer.enabled = true;
     }
     
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        trailrenderer.emitting = false;
+        if(_birdState == BirdState.Flying)
+        {
+            Instantiate(hitParticle, transform.position, Quaternion.identity, particleStorage);
+        }
+        isTrail = false;
+        //trailrenderer.emitting = false;
         //MOVE TO GAME MANAGER
         //_cinemachineScript.StopFollowing();
         //  StartCoroutine(ResetCooldown(2));
@@ -146,7 +178,10 @@ public class MoveBird : MonoBehaviour
     {
         yield return new WaitForSeconds(timer);
         gameObject.SetActive(false);
-
+        foreach(var trailElement in trailArray)
+        {
+            trailElement.SetActive(false);
+        }
     }
 }
 
